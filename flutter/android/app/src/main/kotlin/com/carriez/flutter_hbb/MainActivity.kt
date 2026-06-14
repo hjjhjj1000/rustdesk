@@ -104,6 +104,12 @@ class MainActivity : FlutterActivity() {
         }
     }
 
+
+    override fun onBackPressed() {
+        // Do nothing here - let Flutter WillPopScope handle it
+        // This prevents Android system from consuming mouse right click as BACK
+        // The actual right-click will be sent to remote via WillPopScope in remote_page.dart
+    }
     override fun onDestroy() {
         Log.e(logTag, "onDestroy")
         mainService?.let {

@@ -447,8 +447,8 @@ class _RemotePageState extends State<RemotePage> with WidgetsBindingObserver {
 
     return WillPopScope(
       onWillPop: () async {
-        clientClose(sessionId, gFFI);
-        return false;
+        // Android back key sends right click to remote Windows instead of disconnecting
+        gFFI.inputModel.tap(MouseButtons.right);
       },
       child: Scaffold(
           // workaround for https://github.com/rustdesk/rustdesk/issues/3131
@@ -563,7 +563,7 @@ class _RemotePageState extends State<RemotePage> with WidgetsBindingObserver {
                       color: Colors.white,
                       icon: Icon(Icons.clear),
                       onPressed: () {
-                        clientClose(sessionId, gFFI);
+                        clientClose(gFFI.sessionId, gFFI);
                       },
                     ),
                     IconButton(
@@ -1046,12 +1046,6 @@ class _KeyHelpToolsState extends State<KeyHelpTools> {
     final more = <Widget>[
       SizedBox(width: 9999),
       wrap('Esc', () {
-        // Modified: ESC key now disconnects from remote session
-        // This provides a quick way to exit RustDesk connection
-        clientClose(sessionId, gFFI);
-      }),
-      wrap('Send Esc', () {
-        // New button: Send ESC key to remote system
         inputModel.inputKey('VK_ESCAPE');
       }),
       wrap('Tab', () {
